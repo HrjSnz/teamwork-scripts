@@ -1,0 +1,25 @@
+{
+  "name": "teamwork-time-export",
+  "version": "0.1.0",
+  "description": "Simple CLI pro stažení výkazu času z Teamwork API",
+  "type": "module",
+  "bin": {
+    "fetch-time": "bin/fetch-time.ts",
+    "check-overlaps": "bin/check-overlaps.ts",
+    "fetch-and-check": "bin/fetch-and-check.ts"
+  },
+  "scripts": {
+    "fetch": "node bin/fetch-time.ts",
+    "check": "node bin/check-overlaps.ts",
+    "report": "node bin/fetch-and-check.ts",
+    "test": "node --test",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "typescript": "^6.0.3"
+  }
+}
