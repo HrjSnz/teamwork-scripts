@@ -74,11 +74,16 @@ function buildIntervals(timeEntries: TeamworkTimeEntry[], included: IncludedReco
       skipped.noStartTime.push(entry.id);
       continue;
     }
-    const startTimestamp = Date.parse(entry.timeLogged);
-    if (Number.isNaN(startTimestamp)) {
+    const rawStart = Date.parse(entry.timeLogged);
+    if (Number.isNaN(rawStart)) {
       skipped.noStartTime.push(entry.id);
       continue;
     }
+    // Durations are whole minutes and the report is minute-granular, so drop the seconds
+    // component of the start time. Otherwise an entry ending at e.g. 12:49:02 would "overlap"
+    // a following entry starting at 12:49:00 by a couple of seconds — the same minute can
+    // legitimately be where one entry ends and the next begins.
+    const startTimestamp = Math.floor(rawStart / MILLISECONDS_PER_MINUTE) * MILLISECONDS_PER_MINUTE;
     if (minutes <= 0) {
       skipped.zeroDuration.push(entry.id);
       continue;

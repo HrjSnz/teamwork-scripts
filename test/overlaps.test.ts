@@ -52,6 +52,15 @@ test("B: touching ends (A ends where B starts) → 0 (allowed)", () => {
   assert.equal(result.overlaps.length, 0, "touching at 08:30/08:30 must not be an overlap");
 });
 
+test("B2: sub-minute seconds — A ends and B starts within the same minute → 0 (allowed)", () => {
+  // A starts 12:42:02 for 7 min → ends 12:49:02; B starts 12:49:00 for 6 min.
+  // Raw seconds give a 2-second overlap, but at minute granularity they only touch.
+  const result = analyzeOverlaps(
+    payloadOf(makeTimeEntry("2026-06-29T12:42:02Z", 7, { id: 1 }), makeTimeEntry("2026-06-29T12:49:00Z", 6, { id: 2 })),
+  );
+  assert.equal(result.overlaps.length, 0, "touching within the same minute must not be an overlap");
+});
+
 test("C: partial overlap → 1, correct minutes", () => {
   const result = analyzeOverlaps(
     payloadOf(makeTimeEntry("2026-06-01T08:00:00Z", 15, { id: 1 }), makeTimeEntry("2026-06-01T08:10:00Z", 20, { id: 2 })),
